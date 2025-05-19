@@ -7,6 +7,7 @@ package model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,6 +32,7 @@ public class Jogador implements Serializable{
     @Column(name = "jog_level")
     private int level;
     
+    @OneToMany(mappedBy = "jogador", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Carta> baralho;
 
     public Jogador() {

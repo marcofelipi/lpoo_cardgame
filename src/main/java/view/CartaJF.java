@@ -69,6 +69,11 @@ public class CartaJF extends javax.swing.JFrame {
         });
 
         btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
 
         btnRemover.setText("Remover");
         btnRemover.addActionListener(new java.awt.event.ActionListener() {
@@ -151,6 +156,33 @@ public class CartaJF extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btnRemoverActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        Carta cartaSel = lstCartas.getSelectedValue();
+        if (cartaSel == null) {
+            JOptionPane.showMessageDialog(this, "Selecione uma carta para editar!");
+            return;
+        }
+
+        CadastroCartaJD telaEdicao = new CadastroCartaJD(this, true);
+        telaEdicao.setCarta(cartaSel);
+        telaEdicao.setVisible(true);
+
+        Carta cartaEditada = telaEdicao.getCarta();
+        if (cartaEditada != null) {
+            if (!jpa.conexaoAberta()) {
+                jpa = new PersistenciaJPA();
+            }
+            try {
+                jpa.persist(cartaEditada);
+                JOptionPane.showMessageDialog(this, "Carta atualizada com sucesso!");
+                loadCards();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Erro ao atualizar carta: " + ex.getMessage());
+                Logger.getLogger(CartaJF.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_btnEditarActionPerformed
 
     /**
      * @param args the command line arguments

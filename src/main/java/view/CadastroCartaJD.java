@@ -4,6 +4,8 @@
  */
 package view;
 
+import java.awt.HeadlessException;
+import javax.swing.JOptionPane;
 import model.Carta;
 import model.Categoria;
 
@@ -20,6 +22,15 @@ public class CadastroCartaJD extends javax.swing.JDialog {
 
     public void setCarta(Carta carta) {
         this.carta = carta;
+        if (carta != null) {
+            txtNome.setText(carta.getNome());
+            cmbCategoria.setSelectedItem(carta.getCategoria());
+            txtAtaque.setText(String.valueOf(carta.getAtaque()));
+            txtDefesa.setText(String.valueOf(carta.getDefesa()));
+            lblTitulo.setText("Editar Carta");
+        } else {
+            lblTitulo.setText("Cadastro de Carta");
+        }
     }
 
     /**
@@ -37,6 +48,7 @@ public class CadastroCartaJD extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         loadCategorias();
+        carta = null;
     }
 
     /**
@@ -150,15 +162,24 @@ public class CadastroCartaJD extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        if (carta == null) {
-            carta = new Carta();
+        try {
+            if (carta == null) {
+                carta = new Carta();
+            }
             carta.setNome(txtNome.getText().trim());
-            carta.setCategoria((Categoria)cmbCategoria.getSelectedItem());
-            carta.setAtaque(Integer.parseInt(txtAtaque.getText()));
-            carta.setDefesa(Integer.parseInt(txtDefesa.getText()));
+            if (txtNome.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "O nome da carta é obrigatório!");
+                return;
+            }
+            carta.setCategoria((Categoria) cmbCategoria.getSelectedItem());
+            carta.setAtaque(Integer.parseInt(txtAtaque.getText().trim()));
+            carta.setDefesa(Integer.parseInt(txtDefesa.getText().trim()));
+            dispose();
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Ataque e Defesa devem ser números válidos!");
+        } catch (HeadlessException ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao salvar carta: " + ex.getMessage());
         }
-        
-        dispose();
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     /**

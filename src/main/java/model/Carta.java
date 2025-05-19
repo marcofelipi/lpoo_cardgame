@@ -35,6 +35,11 @@ public class Carta implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "car_categoria", nullable = true)
     private Categoria categoria;
+    
+    @ManyToOne
+    @JoinColumn(name = "jog_id", nullable = true)
+    private Jogador jogador;
+
 
     public Carta() {
     }
@@ -87,6 +92,13 @@ public class Carta implements Serializable {
     public String toString() {
         return nome +" ("+categoria+"): A: "+ataque+" - D: "+defesa;
     }
-    
-    
+
+    public Jogador getJogador() {
+        return jogador;
+    }
+
+    public void setJogador(Jogador jogador) {
+        this.jogador = jogador;
+    }
+
 }
